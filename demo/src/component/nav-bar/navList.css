@@ -1,0 +1,13 @@
+#nav-div
+{
+    height: 2rem;
+    width: 100%;
+  
+    
+}
+a{
+    padding-left: 2rem;
+}
+li {
+    display: inline;
+  }
