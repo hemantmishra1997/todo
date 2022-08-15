@@ -50,6 +50,7 @@ mainRoute.post("/addTask", varifyToken, (req, res) => {
 
 //------------------------------------------get inital task list------------------------------------------
 mainRoute.get("/fetchTask", varifyToken ,(req, res) => {
+    console.log("data");
     const decoded = jwt.verify(token, "my first project");
     var a = url.parse(req.url,true).query
    // var userDetails=url.parse(req.url,true).
@@ -88,7 +89,7 @@ mainRoute.delete("/:id", (req, res) => {
 })
 
 mainRoute.post("/userRegister", (req, res) => {
-    console.log(req.body,);
+    
 // ------------------------------------------empty object------------------------------------------
     var data = {} 
     if (!req.body.uname) {

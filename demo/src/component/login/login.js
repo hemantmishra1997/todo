@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./login.css";
 import axios from "axios"
 import { Link } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
+  const [output , setOutout] = useState("")
   const [loginDetails, setLoginDetails] = useState({
       email:"",
       password:""
@@ -15,17 +18,37 @@ function Login() {
   function submitHandler(e){
     e.preventDefault()
     axios.post(apiUrl,loginDetails).then((result)=>{
-        console.log(result);
+      if(result.status===200)
+      {
+        console.log(result.data);
+        localStorage.setItem("id",result.data.response._id)
+        localStorage.setItem("name",result.data.response.uname)
+        localStorage.setItem("email",result.data.response.email)
+        localStorage.setItem("password",result.data.response.password)
+        localStorage.setItem("date",result.data.response.info)
+        localStorage.setItem("token",result.data.token)
+        setLoginDetails({})
+        if(result.data.response.role==="admin"){
+        navigate("/admin")
+        }
+        else
+        navigate("/user")
+      }
+      else
+      {
+        setOutout(result.data.token)
+      }
+      console.log(result);
     }).catch((err)=>{
         console.log(err)
     })
-    
   };
 
   return (
     <div id="login-div">
       <center>
           <h3><u>Login User</u></h3>
+          <small>{output}</small>
         <form >
           <table>
             <tr>

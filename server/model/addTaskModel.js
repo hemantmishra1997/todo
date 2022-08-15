@@ -19,8 +19,7 @@ class addTaskModel
         return new Promise((resolve,reject)=>{
             taskData.find(condition,(err,result)=>{
                 err ? reject(err) : resolve(result)
-                console.log(err,"err");
-                console.log(result,"result");
+                
             })
         })
     }

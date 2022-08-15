@@ -54,7 +54,7 @@ class addTaskController {
             addTaskModel.loginModel().then((result) => {
                 var l = result.length;
                 var id = parseInt((l == 0) ? 1 : result[l - 1]._id + 1)
-                console.log(id,"id");
+                
                 userDetails = { ...userDetails, "_id": id, "role": "user", "status": 1, "info": Date() }
                 addTaskModel.registerModel(userDetails).then((result) => {
                     resolve(result)
