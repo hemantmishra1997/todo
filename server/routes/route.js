@@ -39,6 +39,7 @@ const varifyToken = (req, res, next) => {
 
 //------------------------------------------ADD TASK ROUTE------------------------------------------
 mainRoute.post("/addTask", varifyToken, (req, res) => {
+    console.log(req.body);
    const decoded = jwt.verify(token, "my first project");
     req.body = { ...req.body, "userId": decoded.subject }
     addTaskController.addTaskUser(req.body).then((result) => {
@@ -50,7 +51,7 @@ mainRoute.post("/addTask", varifyToken, (req, res) => {
 
 //------------------------------------------get inital task list------------------------------------------
 mainRoute.get("/fetchTask", varifyToken ,(req, res) => {
-    console.log("data");
+    
     const decoded = jwt.verify(token, "my first project");
     var a = url.parse(req.url,true).query
    // var userDetails=url.parse(req.url,true).
