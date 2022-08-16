@@ -20,7 +20,7 @@ function Login() {
     axios.post(apiUrl,loginDetails).then((result)=>{
       if(result.status===200)
       {
-        console.log(result.data);
+
         localStorage.setItem("id",result.data.response._id)
         localStorage.setItem("name",result.data.response.uname)
         localStorage.setItem("email",result.data.response.email)
@@ -38,7 +38,6 @@ function Login() {
       {
         setOutout(result.data.token)
       }
-      console.log(result);
     }).catch((err)=>{
         console.log(err)
     })

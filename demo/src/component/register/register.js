@@ -16,7 +16,6 @@ function Register() {
   //register Handler
   const registerHandler = (e) => {
     e.preventDefault();
-    console.log(registerDetals);
     axios.post(urlApi,registerDetals).then((result)=>{
       setOutput(result.data.response)
        
@@ -39,11 +38,7 @@ function Register() {
               <td>
                 <input
                   type="text"
-                  onChange={(e) => {
-                    setRegisterDetails({
-                      ...registerDetals,
-                      uname: e.target.value,
-                    });
+                  onChange={(e) => {setRegisterDetails({...registerDetals,uname: e.target.value});
                   }}
                   value={registerDetals.uname}
                   placeholder="Enter Name"

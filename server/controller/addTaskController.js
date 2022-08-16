@@ -4,14 +4,11 @@ import addTaskModel from "../model/addTaskModel.js";
 
 class addTaskController {
     addTaskUser(userTask) {
-        console.log(userTask);
-
         return new Promise((resolve, reject) => {
             addTaskModel.featchTaskModel().then((result) => {
                 let l = result.length
                 var id = parseInt((l == 0) ? 1 : result[l - 1]._id + 1)
                 userTask = { ...userTask, "_id": id, "state":"Initial","info":Date()}
-                console.log(userTask);
                 addTaskModel.addTaskDb(userTask).then((result) => {
                     resolve(result)
                 }).catch((err) => {

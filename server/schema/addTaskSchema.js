@@ -3,6 +3,9 @@ const addTaskSchema  = mongoose.Schema({
     _id:{
         type:Number
     },
+    time:{
+        type: String,
+    },
     task:{
         type:String,
         require:[true,"task required"],

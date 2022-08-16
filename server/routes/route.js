@@ -11,6 +11,7 @@ var token = "";
 // ------------------------------------------start middleware------------------------------------------
 //------------------------------------------token verify middle ware------------------------------------------
 const varifyToken = (req, res, next) => {
+    
     token = req.headers["authorization"]
     if (token) {
         token = token.split(" ")[1]
@@ -39,7 +40,7 @@ const varifyToken = (req, res, next) => {
 
 //------------------------------------------ADD TASK ROUTE------------------------------------------
 mainRoute.post("/addTask", varifyToken, (req, res) => {
-    console.log(req.body);
+   
    const decoded = jwt.verify(token, "my first project");
     req.body = { ...req.body, "userId": decoded.subject }
     addTaskController.addTaskUser(req.body).then((result) => {
@@ -67,7 +68,6 @@ mainRoute.get("/fetchTask", varifyToken ,(req, res) => {
 
 mainRoute.put("/:id",varifyToken, (req, res) => {
     const id = req.params.id
-    console.log(id,req.body);
     addTaskController.updateTask(id, req.body).then((result) => {
         res.status(200).json({"response":"data update sucessfully"})
     }).catch((err) => {
@@ -154,7 +154,6 @@ mainRoute.post("/loginuser", (req, res) => {
 })
  
 mainRoute.put("/",(req,res)=>{
-    console.log("hii");
     res.json({"response":"hello"})
 })
     

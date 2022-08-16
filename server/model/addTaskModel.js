@@ -5,7 +5,6 @@ class addTaskModel
 {
     addTaskDb(userTask)
     {
-        console.log(userTask);
         return new Promise((resolve,reject)=>{
             
             const obj = taskData(userTask)
@@ -25,7 +24,6 @@ class addTaskModel
     }
     updateTaskModel(id,taskDetails)
     {
-        console.log(taskDetails);
         return new Promise((resolve,reject)=>{
             taskData.findOneAndUpdate({"_id":id},{$set:{"state":taskDetails.state,"category":taskDetails.category
             }},(err,result)=>{

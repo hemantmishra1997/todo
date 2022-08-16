@@ -1,11 +1,16 @@
 import React, { useEffect , useState} from "react";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import Userlist from "./userList";
 import axios from "axios";
 import "./user.css";
 
 function User() {
-  const [task ,setTask] = useState() 
+  const [addTask ,setAddTask] = useState({
+    task:"",
+    time:""
+  }) 
+  const [result ,setResult] = useState({})
+  const [output ,setOutput] = useState("")
   const apiURlFetchTask = "http://localhost:3010/webapi/fetchTask";
   const apiURladdTask = "http://localhost:3010/webapi/addTask";
   const userDetail = localStorage.getItem("email");
@@ -15,7 +20,7 @@ function User() {
   //useEffect Hook
   useEffect(() => {
     getItems();
-  });
+  },[]);
 
   //logout handler
   const logoutHandler = () => {
@@ -28,27 +33,25 @@ function User() {
     axios
       .get(apiURlFetchTask, { headers: { Authorization: "Bearer " + token } })
       .then((result) => {
-        console.log(result);
+        //console.log(result.data.response.length);
+        setResult(result.data.response);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
-  //inputfield data
-  const taskHandler = (e)=>{
-    setTask(e.target.value)
-  }
   
   //add data handler event
-  const addDataHandler = (e)=>{
+   const addDataHandler = (e)=>{
     e.preventDefault()
-    axios.post(apiURladdTask,task, {headers: { Authorization: "Bearer " + token } }).then((result)=>{
-      console.log(result);
+    console.log(addTask);
+    axios.post(apiURladdTask, addTask , {headers: {Authorization: "Bearer " + token } }).then((result)=>{
+      setOutput(result.data.response);
     }).catch((err)=>{
       console.log(err);
     })
   }
+
   return (
     <div id="user-div">
       <span>
@@ -58,12 +61,19 @@ function User() {
 
       <center>
         <div form-div>
+          <small>{output}</small>
           <form>
             <table>
               <tr>
                 <th>Add Task</th>
                 <td>
-                  <input type="text" onChange={taskHandler} placeholder="enter task" />
+                  <input type="text" onChange={(e)=>setAddTask({...addTask,"task":e.target.value})}  placeholder="enter task" />
+                </td>
+              </tr>
+              <tr>
+                <th>Reminder</th>
+                <td>
+                  <input type="time" onChange={(e)=>setAddTask({...addTask,"time":e.target.value})}  />
                 </td>
               </tr>
               <tr>
@@ -76,7 +86,8 @@ function User() {
             </table>
           </form>
         </div>
-        <Userlist />
+        <hr/>
+        <Userlist items={result}/>
         <button type="button" onClick={logoutHandler}>
           Logout
         </button>
