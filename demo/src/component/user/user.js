@@ -1,22 +1,23 @@
 import React, { useEffect , useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Userlist from "./userList";
+import Userdonelist from "./userDoneList";
 import Userrunninglist from "./userRunningList";
+import Addtask from "./addTask";
 import axios from "axios";
 import "./user.css";
 
 function User() {
-  const [addTask ,setAddTask] = useState({
-    task:"",
-    time:""
-  }) 
   const [initalResult ,setinitalResult] = useState([])
-  const [output ,setOutput] = useState("")
+  const [runningResult ,setRunningResult] = useState([])
+  const [output, setOutput] = useState("");
+  const [doneResult ,setDoneResult] = useState([])
   const apiURlFetchTaskInital = "http://localhost:3010/webapi/fetchTask?state=Initial";
   const apiURlFetchTaskRunning = "http://localhost:3010/webapi/fetchTask?state=running";
   const apiURlFetchTaskDone = "http://localhost:3010/webapi/fetchTask?state=done";
-
   const apiURladdTask = "http://localhost:3010/webapi/addTask";
+
+
   const userDetail = localStorage.getItem("email");
   const token = localStorage.getItem("token");
   let navigate = useNavigate();
@@ -39,9 +40,7 @@ function User() {
     axios
       .get(apiURlFetchTaskInital, { headers: { Authorization: "Bearer " + token } })
       .then((result) => {
-        //console.log(result.data.response.length);
         setinitalResult(result.data.response);
-        //
       })
       .catch((err) => {
         console.log(err);
@@ -53,7 +52,8 @@ function User() {
     axios
       .get(apiURlFetchTaskRunning, { headers: { Authorization: "Bearer " + token } })
       .then((result) => {
-        console.log(result.data.response);
+        //console.log(result.data.response);
+        setRunningResult(result.data.response)
        // (result.data.response);
       })
       .catch((err) => {
@@ -66,8 +66,7 @@ function User() {
     axios
       .get(apiURlFetchTaskDone, { headers: { Authorization: "Bearer " + token } })
       .then((result) => {
-        console.log(result.data.response);
-       // setResult(result.data.response);
+        setDoneResult(result.data.response)
       })
       .catch((err) => {
         console.log(err);
@@ -75,19 +74,25 @@ function User() {
   };
 
   //add data handler event
-   const addDataHandler = (e)=>{
-    e.preventDefault()
-    console.log(addTask);
-    axios.post(apiURladdTask, addTask , {headers: {Authorization: "Bearer " + token } }).then((result)=>{
-      setOutput(result.data.response);
-      setAddTask.time("")
-      setAddTask.task("")
-
-      getItemsInitial();
-    }).catch((err)=>{
-      console.log(err);
-    })
+  const addTask = (newTask)=>{
+    console.log(newTask,"newtask");
+    axios
+      .post(apiURladdTask, newTask, {
+        headers: { Authorization: "Bearer " + token },
+      })
+      .then((result) => {
+        setOutput(result.data.response)
+        getItemsInitial();
+    getItemsRunning();
+    getItemsDone();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
+
+
+
 
   return (
     <div id="user-div">
@@ -95,38 +100,15 @@ function User() {
         <u>Welcome User </u>:- {userDetail}
       </span>
       <br />
-
       <center>
-        <div form-div>
-          <small>{output}</small>
-          <form>
-            <table>
-              <tr>
-                <th>Add Task</th>
-                <td>
-                  <input type="text" onChange={(e)=>setAddTask({...addTask,"task":e.target.value})} value={addTask.task} placeholder="enter task" />
-                </td>
-              </tr>
-              <tr>
-                <th>Reminder</th>
-                <td>
-                  <input type="time" value={addTask.time} onChange={(e)=>setAddTask({...addTask,"time":e.target.value})}  />
-                </td>
-              </tr>
-              <tr>
-                <td colSpan={2}>
-                  <center>
-                    <button type="button" onClick={addDataHandler}>Add Task</button>
-                  </center>
-                </td>
-              </tr>
-            </table>
-          </form>
-        </div>
+        <Addtask onAdd = {addTask} oput={output} />
         <hr/>
         <Userlist items={initalResult}/>
         <hr/>
-        < Userrunninglist  />
+        <Userrunninglist runningItems={runningResult}/>
+        <hr/>
+        <Userdonelist doneItems={doneResult}/>
+        <hr/>
         <button type="button" onClick={logoutHandler}>
           Logout
         </button>

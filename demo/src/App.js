@@ -7,6 +7,7 @@ import Register from './component/register/register';
 import User from './component/user/user';
 import Admin from './component/admin/admin';
 import Logout from './component/logout/logout';
+import Footer from './component/footer/footer';
 
 function App() {
 
@@ -30,14 +31,8 @@ function App() {
        <Route path = "/user" element={<User />}></Route> 
        <Route path = "/admin" element={<Admin />}></Route> 
        <Route path = "/logout" element={<Logout />}></Route>
-
-
-      {/* <Route path = "/login" element={<Login/>}></Route> 
-      <Route path = "/usertask" element={<Usertask/>}></Route> 
-      <Route path = "/addtodo" element={<AddToDo addNewToDo={newToDo}/>}></Route> */}
-
      </Routes>  
-   
+      <Footer />
     </div>
   );
 }

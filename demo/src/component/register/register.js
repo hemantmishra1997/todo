@@ -9,19 +9,21 @@ function Register() {
     email: "",
     password: "",
   });
-  const [output,setOutput] = useState("")
+  const [output, setOutput] = useState("");
 
-  const urlApi ="http://localhost:3010/webapi/userRegister"
+  const urlApi = "http://localhost:3010/webapi/userRegister";
 
   //register Handler
   const registerHandler = (e) => {
     e.preventDefault();
-    axios.post(urlApi,registerDetals).then((result)=>{
-      setOutput(result.data.response)
-       
-    }).catch((err)=>{
+    axios
+      .post(urlApi, registerDetals)
+      .then((result) => {
+        setOutput(result.data.response);
+      })
+      .catch((err) => {
         console.log(err);
-    })
+      });
   };
 
   return (
@@ -38,7 +40,11 @@ function Register() {
               <td>
                 <input
                   type="text"
-                  onChange={(e) => {setRegisterDetails({...registerDetals,uname: e.target.value});
+                  onChange={(e) => {
+                    setRegisterDetails({
+                      ...registerDetals,
+                      uname: e.target.value,
+                    });
                   }}
                   value={registerDetals.uname}
                   placeholder="Enter Name"
@@ -86,7 +92,10 @@ function Register() {
             </tr>
           </table>
         </form>
-        <Link to="../login"> <button type="button">Login</button> </Link>
+        <Link to="../login">
+          {" "}
+          <button type="button">Login</button>{" "}
+        </Link>
       </center>
     </div>
   );

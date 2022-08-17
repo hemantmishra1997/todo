@@ -40,6 +40,7 @@ const varifyToken = (req, res, next) => {
 
 //------------------------------------------ADD TASK ROUTE------------------------------------------
 mainRoute.post("/addTask", varifyToken, (req, res) => {
+    
    var data = {} //blank object
    if(!req.body.task)
    {
@@ -50,7 +51,7 @@ mainRoute.post("/addTask", varifyToken, (req, res) => {
     return  res.status(201).json({ "response": "time is missing" });
    }
    data.task = req.body.task;
-   data.time = req.body.task;
+   data.time = req.body.time;
    const decoded = jwt.verify(token, "my first project");
     data = { ...data, "userId": decoded.subject }
     addTaskController.addTaskUser(data).then((result) => {

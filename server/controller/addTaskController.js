@@ -3,7 +3,9 @@ import addTaskModel from "../model/addTaskModel.js";
 
 
 class addTaskController {
+
     addTaskUser(userTask) {
+        console.log(userTask);
         return new Promise((resolve, reject) => {
             addTaskModel.featchTaskModel().then((result) => {
                 let l = result.length
