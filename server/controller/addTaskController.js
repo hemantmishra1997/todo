@@ -20,6 +20,7 @@ class addTaskController {
         })
     }
     featchTask(userId) {
+        console.log(userId);
         return new Promise((resolve, reject) => {
             addTaskModel.featchTaskModel(userId).then((result) => {
                 resolve(result)

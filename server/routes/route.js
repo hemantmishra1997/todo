@@ -40,10 +40,20 @@ const varifyToken = (req, res, next) => {
 
 //------------------------------------------ADD TASK ROUTE------------------------------------------
 mainRoute.post("/addTask", varifyToken, (req, res) => {
-   
+   var data = {} //blank object
+   if(!req.body.task)
+   {
+    return  res.status(201).json({ "response": "task is missing" });
+   }
+   if(!req.body.time)
+   {
+    return  res.status(201).json({ "response": "time is missing" });
+   }
+   data.task = req.body.task;
+   data.time = req.body.task;
    const decoded = jwt.verify(token, "my first project");
-    req.body = { ...req.body, "userId": decoded.subject }
-    addTaskController.addTaskUser(req.body).then((result) => {
+    data = { ...data, "userId": decoded.subject }
+    addTaskController.addTaskUser(data).then((result) => {
         res.status(200).json({ "response": "data save successfully" })
     }).catch((err) => {
         res.status(200).json({ "response": err })
@@ -55,9 +65,7 @@ mainRoute.get("/fetchTask", varifyToken ,(req, res) => {
     
     const decoded = jwt.verify(token, "my first project");
     var a = url.parse(req.url,true).query
-   // var userDetails=url.parse(req.url,true).
    let data = { ...a,"userId": decoded.subject}
- 
     addTaskController.featchTask(data).then((result) => {
         res.status(200).json({"response":result})
     }).catch((err) => {
