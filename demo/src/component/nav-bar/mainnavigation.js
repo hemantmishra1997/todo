@@ -3,24 +3,15 @@ import "./mainnavigation.css";
 import Navlistuser from "./navListUser";
 import NavList from "./navlist";
 
-function Mainnavigation() {
-  const [role, setRole] = useState("");
-  useEffect(() => {
-    
-      checkRole()
-    
-  });
-  const checkRole = ()=>{
-    setRole(localStorage.getItem("role"));
-  }
-
-  if(role === "user") {
+function Mainnavigation(props) {
+ console.log(props.roleState);
+  if(props.roleState === "user") {
     return (
       <nav>
         <Navlistuser />
       </nav>
     );
-  } else if (role === "admin") {
+  } else if (props.roleState === "admin") {
     return (
       <nav>
         <Navlistuser />

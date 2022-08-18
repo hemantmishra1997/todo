@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { UNSAFE_NavigationContext, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./user.css";
 import Userlist from "./userList";
@@ -7,10 +7,11 @@ import Userdonelist from "./userDoneList";
 import Userrunninglist from "./userRunningList";
 import Addtask from "./addTask";
 
-function User() {
+function User(props) {
   const [initalResult, setinitalResult] = useState([]);
   const [runningResult, setRunningResult] = useState([]);
   const [output, setOutput] = useState("");
+  const [loader , setLoader] = useState(false)
   const [doneResult, setDoneResult] = useState([]);
   const apiURlFetchTaskInital =
     "http://localhost:3010/webapi/fetchTask?state=Initial";
@@ -30,38 +31,47 @@ function User() {
     getItemsInitial();
     getItemsRunning();
     getItemsDone();
+    props.cRole()
   }, []);
 
   //logout handler
   const logoutHandler = () => {
     localStorage.clear();
     navigate("../login");
+    props.cRole()
   };
 
   //webapi for get initial data defination
+  
   const getItemsInitial = () => {
-    axios
-      .get(apiURlFetchTaskInital, {
+    setLoader(true)
+    setTimeout(()=>{
+    
+      axios.get(apiURlFetchTaskInital,{
         headers: { Authorization: "Bearer " + token },
-      })
-      .then((result) => {
-        setinitalResult(result.data.response);
-      })
-      .catch((err) => {
+      }).then((result)=>{
+        setLoader(false)
+        setinitalResult(result.data.response)
+      }).catch((err)=>{
         console.log(err);
-      });
-  };
+      })
+    },3000)
+  }
 
-  //webapi for get running data defination
+    //webapi for get runnning data defination
   const getItemsRunning = () => {
+    
     axios
       .get(apiURlFetchTaskRunning, {
         headers: { Authorization: "Bearer " + token },
       })
       .then((result) => {
+        
         setRunningResult(result.data.response);
       })
       .catch((err) => {
+        
+
         console.log(err);
       });
   };
@@ -118,7 +128,7 @@ function User() {
       <center>
         <Addtask onAdd={addTask} oput={output} />
         <hr />
-        <Userlist items={initalResult} changeState={updateState} />
+        <Userlist items={initalResult} changeState={updateState} mLoader = {loader}/>
         <hr />
         <Userrunninglist runningItems={runningResult} changeState={updateState} />
         <hr />

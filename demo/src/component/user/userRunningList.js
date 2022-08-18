@@ -6,8 +6,10 @@ function Userrunninglist(props){
   const stateChanege = (id,state)=>{
     props.changeState(id,state)
   }
-    if (props.runningItems.length === 0) {
-        return (
+  return<>
+  {props.mLoader?<h2>loding...</h2>:            
+
+    props.runningItems.length === 0 ?
           <div>
             <small>
               <u>This is Running State</u>
@@ -16,11 +18,7 @@ function Userrunninglist(props){
             <br />
             no Task Found
           </div>
-        );
-      }
-      else
-      {
-        return (
+      :
             <div>
               <small>
                 <u>This is Running State</u>
@@ -33,7 +31,7 @@ function Userrunninglist(props){
                 }
               </ul>
             </div>
-          );
       }
+      </>
 }
 export default Userrunninglist

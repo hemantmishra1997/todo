@@ -6,11 +6,13 @@ function Userlist(props) {
   
   const stateChanege = (id,state)=>{
     props.changeState(id,state)
+
   }
+  return<>
 
+    {props.mLoader?<h2>loding...</h2>:            
 
-  if (props.items.length === 0) {
-    return (
+     (props.items.length === 0) ?
       <div>
         <small>
           <u>This is initial</u>
@@ -18,11 +20,7 @@ function Userlist(props) {
         <br />
         <br />
         no Task Found
-      </div>
-    );
-  } else
-    return (
-      <div>
+      </div>:<div>
         <small>
           <u>This is initial</u>
         </small>
@@ -34,6 +32,7 @@ function Userlist(props) {
           }
         </ul>
       </div>
-    );
+}
+</>
 }
 export default Userlist;
