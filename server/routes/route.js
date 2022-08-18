@@ -92,7 +92,7 @@ mainRoute.delete("/:id", (req, res) => {
             result: result
         })
     }).catch((err) => {
-        res.status(500).json({
+        res.status(201).json({
             err: err
         })
     })

@@ -24,7 +24,7 @@ function Login() {
           localStorage.setItem("id", result.data.response._id);
           localStorage.setItem("name", result.data.response.uname);
           localStorage.setItem("email", result.data.response.email);
-          localStorage.setItem("password", result.data.response.password);
+          localStorage.setItem("role", result.data.response.role);
           localStorage.setItem("date", result.data.response.info);
           localStorage.setItem("token", result.data.token);
           setLoginDetails({});

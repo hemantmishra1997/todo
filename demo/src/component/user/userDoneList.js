@@ -3,6 +3,9 @@ import "./userDoneList.css";
 import Userdoneitems from "./userDoneItems";
 
 function Userdonelist(props) {
+  const stateChanege = (id,state)=>{
+    props.changeState(id,state)
+  }
   if (props.doneItems.length === 0) {
     return (
       <div>
@@ -25,7 +28,7 @@ function Userdonelist(props) {
          <ul>
             {
               props.doneItems.map((ele)=>
-              <Userdoneitems key = {ele._id} data={ele} />
+              <Userdoneitems key = {ele._id} data={ele} cState = {stateChanege} />
               )
             }
           </ul>

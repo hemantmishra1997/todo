@@ -28,7 +28,6 @@ class addTaskModel
             taskData.findOneAndUpdate({"_id":id},{$set:{"state":taskDetails.state,"category":taskDetails.category
             }},(err,result)=>{
                 err?reject(err):resolve(result)
-                
             })
         })
     }

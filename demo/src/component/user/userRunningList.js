@@ -3,6 +3,9 @@ import "./userRunningList.css";
 import Userrunningitem from "./userRunningItem";
 
 function Userrunninglist(props){
+  const stateChanege = (id,state)=>{
+    props.changeState(id,state)
+  }
     if (props.runningItems.length === 0) {
         return (
           <div>
@@ -25,7 +28,7 @@ function Userrunninglist(props){
              <ul>
                 {
                   props.runningItems.map((ele)=>
-                  <Userrunningitem key = {ele._id} data={ele} />
+                  <Userrunningitem key = {ele._id} data={ele} cState = {stateChanege}/>
                   )
                 }
               </ul>

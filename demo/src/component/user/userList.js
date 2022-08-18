@@ -3,6 +3,12 @@ import Useritem from "./userItem";
 import "./userItem.css";
 
 function Userlist(props) {
+  
+  const stateChanege = (id,state)=>{
+    props.changeState(id,state)
+  }
+
+
   if (props.items.length === 0) {
     return (
       <div>
@@ -23,7 +29,7 @@ function Userlist(props) {
        <ul>
           {
             props.items.map((ele)=>
-            <Useritem key = {ele._id} data={ele} />
+            <Useritem key = {ele._id} data={ele} cState = {stateChanege} />
             )
           }
         </ul>

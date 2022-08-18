@@ -1,22 +1,25 @@
-import React, { useEffect , useState} from "react";
-import {useNavigate} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./user.css";
 import Userlist from "./userList";
 import Userdonelist from "./userDoneList";
 import Userrunninglist from "./userRunningList";
 import Addtask from "./addTask";
-import axios from "axios";
-import "./user.css";
 
 function User() {
-  const [initalResult ,setinitalResult] = useState([])
-  const [runningResult ,setRunningResult] = useState([])
+  const [initalResult, setinitalResult] = useState([]);
+  const [runningResult, setRunningResult] = useState([]);
   const [output, setOutput] = useState("");
-  const [doneResult ,setDoneResult] = useState([])
-  const apiURlFetchTaskInital = "http://localhost:3010/webapi/fetchTask?state=Initial";
-  const apiURlFetchTaskRunning = "http://localhost:3010/webapi/fetchTask?state=running";
-  const apiURlFetchTaskDone = "http://localhost:3010/webapi/fetchTask?state=done";
+  const [doneResult, setDoneResult] = useState([]);
+  const apiURlFetchTaskInital =
+    "http://localhost:3010/webapi/fetchTask?state=Initial";
+  const apiURlFetchTaskRunning =
+    "http://localhost:3010/webapi/fetchTask?state=running";
+  const apiURlFetchTaskDone =
+    "http://localhost:3010/webapi/fetchTask?state=done";
   const apiURladdTask = "http://localhost:3010/webapi/addTask";
-
+  const apiUrlUpdateState = "http://localhost:3010/webapi/";
 
   const userDetail = localStorage.getItem("email");
   const token = localStorage.getItem("token");
@@ -27,7 +30,7 @@ function User() {
     getItemsInitial();
     getItemsRunning();
     getItemsDone();
-  },[]);
+  }, []);
 
   //logout handler
   const logoutHandler = () => {
@@ -38,7 +41,9 @@ function User() {
   //webapi for get initial data defination
   const getItemsInitial = () => {
     axios
-      .get(apiURlFetchTaskInital, { headers: { Authorization: "Bearer " + token } })
+      .get(apiURlFetchTaskInital, {
+        headers: { Authorization: "Bearer " + token },
+      })
       .then((result) => {
         setinitalResult(result.data.response);
       })
@@ -46,15 +51,15 @@ function User() {
         console.log(err);
       });
   };
-  
+
   //webapi for get running data defination
   const getItemsRunning = () => {
     axios
-      .get(apiURlFetchTaskRunning, { headers: { Authorization: "Bearer " + token } })
+      .get(apiURlFetchTaskRunning, {
+        headers: { Authorization: "Bearer " + token },
+      })
       .then((result) => {
-        //console.log(result.data.response);
-        setRunningResult(result.data.response)
-       // (result.data.response);
+        setRunningResult(result.data.response);
       })
       .catch((err) => {
         console.log(err);
@@ -64,9 +69,11 @@ function User() {
   //webapi for get done data defination
   const getItemsDone = () => {
     axios
-      .get(apiURlFetchTaskDone, { headers: { Authorization: "Bearer " + token } })
+      .get(apiURlFetchTaskDone, {
+        headers: { Authorization: "Bearer " + token },
+      })
       .then((result) => {
-        setDoneResult(result.data.response)
+        setDoneResult(result.data.response);
       })
       .catch((err) => {
         console.log(err);
@@ -74,26 +81,34 @@ function User() {
   };
 
   //add data handler event
-  const addTask = (newTask)=>{
-    console.log(newTask,"newtask");
+  const addTask = (newTask) => {
     axios
       .post(apiURladdTask, newTask, {
         headers: { Authorization: "Bearer " + token },
       })
       .then((result) => {
-        setOutput(result.data.response)
+        setOutput(result.data.response);
         getItemsInitial();
-    getItemsRunning();
-    getItemsDone();
+        getItemsRunning();
+        getItemsDone();
       })
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
-
-
-
+  //update State
+  const updateState = (id, state) => {
+   var data = { "state": state };
+    axios.put(apiUrlUpdateState + id, data, {
+      headers: { Authorization: "Bearer " + token },
+    }).then((result)=>{
+      setOutput(result.data.response);
+      getItemsInitial();
+      getItemsRunning();
+      getItemsDone();
+    })
+  };
   return (
     <div id="user-div">
       <span>
@@ -101,14 +116,14 @@ function User() {
       </span>
       <br />
       <center>
-        <Addtask onAdd = {addTask} oput={output} />
-        <hr/>
-        <Userlist items={initalResult}/>
-        <hr/>
-        <Userrunninglist runningItems={runningResult}/>
-        <hr/>
-        <Userdonelist doneItems={doneResult}/>
-        <hr/>
+        <Addtask onAdd={addTask} oput={output} />
+        <hr />
+        <Userlist items={initalResult} changeState={updateState} />
+        <hr />
+        <Userrunninglist runningItems={runningResult} changeState={updateState} />
+        <hr />
+        <Userdonelist doneItems={doneResult} changeState={updateState}/>
+        <hr />
         <button type="button" onClick={logoutHandler}>
           Logout
         </button>
