@@ -4,7 +4,6 @@ import Navlistuser from "./navListUser";
 import NavList from "./navlist";
 
 function Mainnavigation(props) {
- console.log(props.roleState);
   if(props.roleState === "user") {
     return (
       <nav>

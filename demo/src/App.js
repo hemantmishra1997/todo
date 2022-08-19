@@ -22,7 +22,7 @@ function App() {
     <div className="app">
       <Header />
 
-      <Mainnavigation roleState={role} />
+       <Mainnavigation roleState={role} />
       <br />
 
       <Routes>
@@ -32,7 +32,7 @@ function App() {
         <Route path="/user" element={<User cRole={checkRole} />}></Route>
         <Route path="/admin" element={<Admin />}></Route>
       </Routes>
-      <Footer />
+      <Footer /> 
     </div>
   );
 }
