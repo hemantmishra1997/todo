@@ -57,7 +57,7 @@ mainRoute.post("/addTask", varifyToken, (req, res) => {
     .addTaskUser(data)
     .then((result) => {
         res.status(200).json({ response: "data save successfully" });
-        reminder()
+        //reminder()
      })
     .catch((err) => {
       res.status(200).json({ response: err });
@@ -181,40 +181,86 @@ mainRoute.put("/", (req, res) => {
   res.json({ response: "hello" });
 });
 
-mainRoute.get("*", (req, res) => {
-  res.status(500);
-  res.json({ error: "oops something went wrong    " });
-});
 
-export default mainRoute;
-
-function reminder(){
-    //cron schdular
-    console.log("schedular");
-    cron.schedule("*/60 * * * * *", () => {
-      addTaskController
-        .featchTask({ state: "Initial" })
-        .then((result) => {
+//reminder
+mainRoute.get("/reminder", (req, res) => {
+  console.log("schedular");
+  cron.schedule("*/60 * * * * *", () => {
+    addTaskController
+    .featchTask({ state: "Initial" })
+    .then((result) => {
+      var dhh
+      var dmm
           var d = new Date();
-          var dh = d.getHours() - 1; // => 9
-          var dm = d.getMinutes() - 1; // =>  30
-          var timeNow = dh + ":" + dm;
+          var dh = d.getHours() ; // => 9
+          var dm = d.getMinutes(); // =>  30
+          (dh>=1&&dh<=9)? dhh = "0"+dh: dhh = dh
+          (dm>=1&&dm<=9)? dmm = "0"+dm: dmm = dm
+
+          var timeNow = dhh + ":" + dmm;
           for (let i of result) {
-            //console.log(i.time,timeNow);
+            console.log(i.time,timeNow);
             if (i.time == timeNow) {
               addTaskController
-                .featchTask({ time: i.time })
-                .then((result) => {
-                 console.log(result);
-                })
-                .catch((err) => {
-                  console.log(err, "schedular");
-                });
+              .featchTask({ time: i.time })
+              .then((result) => {
+                console.log(result[0]);
+                res.status(200).json({"response":result[0] })
+              })
+              .catch((err) => {
+                console.log(err, "schedular");
+              });
             } else continue;
           }
         })
         .catch((err) => {
           console.log(err);
         });
+      });
+      
     });
-}
+    
+
+
+
+    mainRoute.get("*", (req, res) => {
+      res.status(500);
+      res.json({ error: "oops something went wrong    " });
+    });
+
+
+
+
+    // export function reminder(){
+      //     //cron schdular
+      //     console.log("schedular");
+      //     cron.schedule("*/3 * * * * *", () => {
+        //       addTaskController
+//         .featchTask({ state: "Initial" })
+//         .then((result) => {
+//           var dhh
+//           var d = new Date();
+//           var dh = d.getHours() ; // => 9
+//           var dm = d.getMinutes(); // =>  30
+//           (dh>=1&&dh<=9)? dhh = "0"+dh: dhh = dh
+//           var timeNow = dhh + ":" + dm;
+//           for (let i of result) {
+//             console.log(i.time,timeNow);
+//             if (i.time == timeNow) {
+//               addTaskController
+//                 .featchTask({ time: i.time })
+//                 .then((result) => {
+
+//                 })
+//                 .catch((err) => {
+//                   console.log(err, "schedular");
+//                 });
+//               } else continue;
+//             }
+//           })
+//           .catch((err) => {
+//             console.log(err);
+//           });
+//         });
+//       }
+      export default mainRoute;

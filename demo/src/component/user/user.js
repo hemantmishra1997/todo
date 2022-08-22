@@ -7,6 +7,7 @@ import Userdonelist from "./userDoneList";
 import Userrunninglist from "./userRunningList";
 import Addtask from "./addTask";
 
+
 function User(props) {
   const [initalResult, setinitalResult] = useState([]);
   const [runningResult, setRunningResult] = useState([]);
@@ -122,7 +123,7 @@ function User(props) {
 
   //add data handler event
   const addTask = (newTask) => {
-    axios
+         axios
       .post(apiURladdTask, newTask, {
         headers: { Authorization: "Bearer " + token },
       })
@@ -131,6 +132,14 @@ function User(props) {
         getItemsInitial();
         getItemsRunning();
         getItemsDone();
+        setTimeout(()=>{
+          axios.get("http://localhost:3010/webapi/reminder" ,{
+           headers: { Authorization: "Bearer " + token },
+         }).then((result)=>{
+           console.log(result);
+             alert(result.data.response)
+         })
+        },3000)
       })
       .catch((err) => {
         console.log(err);

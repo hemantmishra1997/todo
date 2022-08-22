@@ -5,6 +5,7 @@ import cron from "node-cron";
 import addTaskController from "./controller/addTaskController.js";
 
 
+
 const app = express();
 
 app.listen(3010);
@@ -45,5 +46,7 @@ app.use(bodyParser.json());
 //       console.log(err);
 //     });
 // });
+
+//reminder()
 
 app.use("/webapi", mainRoute);
