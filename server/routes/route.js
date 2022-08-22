@@ -185,31 +185,46 @@ mainRoute.put("/", (req, res) => {
 //reminder
 mainRoute.get("/reminder", (req, res) => {
   console.log("schedular");
-  cron.schedule("*/60 * * * * *", () => {
+ var task= cron.schedule("*/60 * * * * *", () => {
     addTaskController
     .featchTask({ state: "Initial" })
     .then((result) => {
-      var dhh
-      var dmm
           var d = new Date();
           var dh = d.getHours() ; // => 9
           var dm = d.getMinutes(); // =>  30
-          (dh>=1&&dh<=9)? dhh = "0"+dh: dhh = dh
-          (dm>=1&&dm<=9)? dmm = "0"+dm: dmm = dm
+          if(dh>=1&&dh<=9){
+            var dhh = "0"+dh
+          }
+          else
+          {
+            dhh = dh
+          }
 
+          if(dm>=1&&dm<=9){
+            var dmm = "0"+dm
+          }
+          else
+          {
+            dmm = dm
+          }
+        //  dhh = (dh>=1&&dh<=9)? ("0"+dh): dh
+        //   (dm>=1&&dm<=9)? dmm = "0"+dm: dmm = dm
           var timeNow = dhh + ":" + dmm;
           for (let i of result) {
-            console.log(i.time,timeNow);
+            //console.log(i.time,timeNow);
             if (i.time == timeNow) {
-              addTaskController
-              .featchTask({ time: i.time })
-              .then((result) => {
-                console.log(result[0]);
-                res.status(200).json({"response":result[0] })
-              })
-              .catch((err) => {
-                console.log(err, "schedular");
-              });
+              setTimeout(()=>{
+                addTaskController
+                .featchTask({ time: i.time })
+                .then((result) => {
+                  //console.log(result[0]);
+                  res.status(200).json({"response":result[0] })
+                  
+                })
+                .catch((err) => {
+                  console.log(err, "schedular");
+                });
+              },200)
             } else continue;
           }
         })
@@ -218,7 +233,7 @@ mainRoute.get("/reminder", (req, res) => {
         });
       });
       
-    });
+   });
     
 
 

@@ -137,7 +137,7 @@ function User(props) {
            headers: { Authorization: "Bearer " + token },
          }).then((result)=>{
            console.log(result);
-             alert(result.data.response)
+             alert(`Reminder ${result.data.response.task}`)
          })
         },3000)
       })
