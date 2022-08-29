@@ -6,12 +6,29 @@ import Login from "./component/login/login";
 import Register from "./component/register/register";
 import User from "./component/user/user";
 import Admin from "./component/admin/admin";
-// import Logout from './component/logout/logout';
 import Footer from "./component/footer/footer";
+
+import {fetchToken,onMessageListener} from "./messaging_init_in_sw.js"
+
 
 function App() {
   const [role, setRole] = useState("");
+  const [show ,setShow]  = useState(false);
+  const [notification , setNotification] = useState({title:"",body:""});
+  const [isTokenFound , setTokenFound] = useState(false);
+  const [getFcmToken ,setFcmToken] = useState("");
+
+  fetchToken(setTokenFound,setFcmToken);
+  // console.log(setFcmToken);
+  onMessageListener().then(payload =>{
+    setNotification({title:payload.notification.title,body:payload.notification.body})
+    setShow(true);
+  }).catch(err => console.log('failed',err));
+
+  console.log(notification.body);
+  console.log(notification.title);
   useEffect(() => {
+    
       checkRole()
   });
   const checkRole = ()=>{

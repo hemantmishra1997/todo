@@ -2,12 +2,9 @@ import express from "express";
 import addTaskController from "../controller/addTaskController.js";
 import * as url from "url";
 import jwt from "jsonwebtoken";
-import cron from "node-cron";
 //import { decode } from "punycode";
 import bcrypt, { genSalt } from "bcrypt";
-//import { appendFile } from "fs";
-// import * as cronn from "./routes/shadular.js"
-
+import cron from "node-cron";
 
 const mainRoute = express.Router();
 var token = "";
@@ -56,9 +53,9 @@ mainRoute.post("/addTask", varifyToken, (req, res) => {
   addTaskController
     .addTaskUser(data)
     .then((result) => {
-        res.status(200).json({ response: "data save successfully" });
-        //reminder()
-     })
+      res.status(200).json({ response: "data save successfully" });
+      //reminder()
+    })
     .catch((err) => {
       res.status(200).json({ response: err });
     });
@@ -181,76 +178,67 @@ mainRoute.put("/", (req, res) => {
   res.json({ response: "hello" });
 });
 
-
 //reminder
-mainRoute.get("/reminder", (req, res) => {
-  console.log("schedular");
- var task= cron.schedule("*/60 * * * * *", () => {
-    addTaskController
-    .featchTask({ state: "Initial" })
-    .then((result) => {
-          var d = new Date();
-          var dh = d.getHours() ; // => 9
-          var dm = d.getMinutes(); // =>  30
-          if(dh>=1&&dh<=9){
-            var dhh = "0"+dh
-          }
-          else
-          {
-            dhh = dh
-          }
 
-          if(dm>=1&&dm<=9){
-            var dmm = "0"+dm
-          }
-          else
-          {
-            dmm = dm
-          }
-        //  dhh = (dh>=1&&dh<=9)? ("0"+dh): dh
-        //   (dm>=1&&dm<=9)? dmm = "0"+dm: dmm = dm
-          var timeNow = dhh + ":" + dmm;
-          for (let i of result) {
-            //console.log(i.time,timeNow);
-            if (i.time == timeNow) {
-              setTimeout(()=>{
-                addTaskController
-                .featchTask({ time: i.time })
-                .then((result) => {
-                  //console.log(result[0]);
-                  res.status(200).json({"response":result[0] })
-                  
-                })
-                .catch((err) => {
-                  console.log(err, "schedular");
-                });
-              },200)
-            } else continue;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      });
-      
-   });
-    
+// mainRoute.get("/reminder", (req, res) => {
+//   console.log("scheduar");
+  // var d = new Date();
+  //       var dh = d.getHours();
+  //       var dm = d.getMinutes();
+  //       if (dh >= 1 && dh <= 9) {
+  //         var dhh = "0" + dh;
+  //       } else {
+  //         dhh = dh;
+  //       }
+
+  //       if (dm >= 1 && dm <= 9) {
+  //         var dmm = "0" + dm;
+  //       } else {
+  //         dmm = dm;
+  //       }
+  //       var timeNow = dhh + ":" + dmm;
+  //       //let timeNowString = String(timeNow)
+  //    console.log("1",timeNow);
+        
+  //       console.log(typeof timeNow);
+  //       cron.schedule("*/30 * * * * *", () => {
+  //    console.log("2",timeNow);
+  //   addTaskController
+  //     .featchTask({ time: timeNow })
+  //     .then((result) => {
+  //       console.log(result);
+        
+        // for (let i of result) {
+        //   console.log(i.time, timeNow);
+        //   if (i.time == timeNow) {
+        //     console.log(i.time);
+        //   }
+        // }
+        // for (let i of result) {
+        //   console.log(i.time, timeNow);
+        // if (i.time == timeNow) {
+        //   addTaskController.featchTask({ time: i.time }).then((result) => {
+        //   console.log(result);
+
+        //   // return (result[0]);
+        //   }).catch((err) => {
+        //   console.log("schedular", err);
+
+        //     });
+        //   }
+        // }
 
 
+mainRoute.get("*", (req, res) => {
+  res.status(500);
+  res.json({ error: "oops something went wrong    " });
+});
 
-    mainRoute.get("*", (req, res) => {
-      res.status(500);
-      res.json({ error: "oops something went wrong    " });
-    });
-
-
-
-
-    // export function reminder(){
-      //     //cron schdular
-      //     console.log("schedular");
-      //     cron.schedule("*/3 * * * * *", () => {
-        //       addTaskController
+// export function reminder(){
+//     //cron schdular
+//     console.log("schedular");
+//     cron.schedule("*/3 * * * * *", () => {
+//       addTaskController
 //         .featchTask({ state: "Initial" })
 //         .then((result) => {
 //           var dhh
@@ -278,4 +266,4 @@ mainRoute.get("/reminder", (req, res) => {
 //           });
 //         });
 //       }
-      export default mainRoute;
+export default mainRoute;

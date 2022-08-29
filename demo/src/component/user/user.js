@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { UNSAFE_NavigationContext, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import "./user.css";
 import Userlist from "./userList";
 import Userdonelist from "./userDoneList";
 import Userrunninglist from "./userRunningList";
 import Addtask from "./addTask";
+import socketIOClient from 'socket.io-client';
 
+const ENDPOINT = "http://localhost:3010/"
 
 function User(props) {
   const [initalResult, setinitalResult] = useState([]);
@@ -14,9 +18,10 @@ function User(props) {
   const [doneResult, setDoneResult] = useState([]);
   const [output, setOutput] = useState("");
   const [loader, setLoader] = useState(false);
+  const [response, setResponse] = useState('');
+
   //const [loaderForRunning , setLoaderForRunning] = useState(false);
   // const [loaderForDone , setLoaderForDone] = useState(false);
-
   const apiURlFetchTaskInital =
     "http://localhost:3010/webapi/fetchTask?state=Initial";
   const apiURlFetchTaskRunning =
@@ -32,6 +37,18 @@ function User(props) {
 
   //useEffect Hook
   useEffect(() => {
+    const socket = socketIOClient(ENDPOINT);
+    socket.on("hello", (arg, callback) => {
+      console.log(arg);
+      if(arg.length==0)
+      {
+        console.log("null data");
+      }
+      else
+      toast(arg[0].task);
+      callback("massgae passed sucessfully");
+    });
+
      getItemsInitial();
     getItemsRunning();
     getItemsDone();
@@ -137,7 +154,8 @@ function User(props) {
            headers: { Authorization: "Bearer " + token },
          }).then((result)=>{
            console.log(result);
-             alert(`Reminder ${result.data.response.task}`)
+          //  alert(`Reminder ${result.data.response.task}`)
+           
          })
         },3000)
       })
@@ -190,5 +208,7 @@ function User(props) {
       </center>
     </div>
   );
+  
 }
+<ToastContainer/>
 export default User;

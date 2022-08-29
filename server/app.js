@@ -1,15 +1,33 @@
-import express from "express";
+import express, { Router } from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+import http from "http";
 import cron from "node-cron";
+import { Server } from "socket.io";
 import addTaskController from "./controller/addTaskController.js";
+import {init} from "./routes/api/notification.js"
 
-
-
+//server created
 const app = express();
+const server = http.createServer(app);
+init()
 
-app.listen(3010);
-console.log("http://localhost:3010");
+// //socket built
+// const io = new Server(server, { cors: { origin: "*" } });
+
+// //socket connection
+// io.on("connection", async (socket) => {
+//   console.log("connection build", socket.id);
+
+//   socket.on("disconnect", async () => {
+//     console.log("Disconnected");
+//   });
+//   var a = await rem();
+//   console.log(a);
+//   socket.emit("hello", a, (response) => {
+//     console.log(response); // "got it"
+//   });
+// });
 
 //route
 import mainRoute from "./routes/route.js";
@@ -17,36 +35,30 @@ import mainRoute from "./routes/route.js";
 //middlware
 app.use(cors());
 app.use(bodyParser.json());
-
-// //cron schdular
-// console.log("schedular");
-// cron.schedule("*/60 * * * * *", () => {
-//   addTaskController
-//     .featchTask({ state: "Initial" })
-//     .then((result) => {
-//       var d = new Date();
-//       var dh = d.getHours() - 1; // => 9
-//       var dm = d.getMinutes() - 1; // =>  30
-//       var timeNow = dh + ":" + dm;
-//       for (let i of result) {
-//         //console.log(i.time,timeNow);
-//         if (i.time == timeNow) {
-//           addTaskController
-//             .featchTask({ time: i.time })
-//             .then((result) => {
-//               console.log(result);
-//             })
-//             .catch((err) => {
-//               console.log(err, "schedular");
-//             });
-//         } else continue;
-//       }
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// });
-
-//reminder()
-
 app.use("/webapi", mainRoute);
+app.set("port", 3010);
+
+server.listen(app.get("port"), function () {
+  var port = server.address().port;
+  console.log("App now running on port", port);
+});
+
+// //reminder logic
+// const rem = async () => {
+//   return await new Promise((resolve, reject) => {
+//     console.log("1");
+//     cron.schedule("*/30 * * * * *", () => {
+
+//       var today = new Date();
+//       var m = today.getMonth() + 1;
+//       var month = m >= 1 && m <= 9 ? "0" + m : m;
+//       var current_date =today.getFullYear() + "-" + month + "-" + today.getDate();
+//       console.log(current_date)
+//       addTaskController
+//         .featchTask({ time: current_date })
+//         .then((result) => {
+//           resolve(result);
+//         });
+//     });
+//   });
+// };

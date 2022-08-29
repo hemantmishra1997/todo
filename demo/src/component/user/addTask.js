@@ -39,7 +39,7 @@ function Addtask(props) {
             <th>Reminder</th>
             <td>
               <input
-                type="time"
+                type="date"
                 value={addTask.time}
                 onChange={(e) =>
                   setAddTask({ ...addTask, time: e.target.value })
