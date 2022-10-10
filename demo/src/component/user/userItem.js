@@ -12,8 +12,8 @@ function Useritem (props)
                 <h3>
                     
                     {props.data.task}&#160;&#160;
-                    <button onClick={()=>{stateChange(props.data._id, "running")}}>Running</button>&#160;&#160;
-                    <button onClick={()=>{stateChange(props.data._id, "done")}}>done</button>
+                    <button onClick={()=>{stateChange(props.data.id, "running")}}>Running</button>&#160;&#160;
+                    <button onClick={()=>{stateChange(props.data.id, "done")}}>done</button>
                     </h3>
             </li>
         </div>

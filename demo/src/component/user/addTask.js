@@ -5,7 +5,8 @@ import axios from "axios";
 function Addtask(props) {
   const [addTask, setAddTask] = useState({
     task: "",
-    time: "",
+    date: "",
+    end_date : ""
   });
   const [output, setOutput] = useState("");
   
@@ -40,13 +41,27 @@ function Addtask(props) {
             <td>
               <input
                 type="date"
-                value={addTask.time}
+                value={addTask.date}
                 onChange={(e) =>
-                  setAddTask({ ...addTask, time: e.target.value })
+                  setAddTask({ ...addTask, date: e.target.value })
                 }
               />
             </td>
           </tr>
+
+          <tr>
+            <th>task end date</th>
+            <td>
+              <input
+                type="date"
+                value={addTask.end_date}
+                onChange={(e) =>
+                  setAddTask({ ...addTask, end_date: e.target.value })
+                }
+              />
+            </td>
+          </tr>
+
           <tr>
             <td colSpan={2}>
               <center>

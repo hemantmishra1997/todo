@@ -10,8 +10,8 @@ function Userdoneitems (props){
             <li>
                     <h3>
                     {props.data.task}&#160;&#160;
-                    <button onClick={()=>{stateChange(props.data._id,"running")}}>Running</button>&#160;&#160;
-                    <button onClick={()=>{stateChange(props.data._id,"Initial")}}>Initial</button></h3>
+                    <button onClick={()=>{stateChange(props.data.id,"running")}}>Running</button>&#160;&#160;
+                    <button onClick={()=>{stateChange(props.data.id,"Initial")}}>Initial</button></h3>
             </li>
         </div>
     )

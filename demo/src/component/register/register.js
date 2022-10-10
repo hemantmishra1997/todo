@@ -8,9 +8,12 @@ function Register() {
     uname: "",
     email: "",
     password: "",
+    gender: "",
+    firstName: "",
+    lastName: "",
   });
+  console.log(registerDetals.gender);
   const [output, setOutput] = useState("");
-
   const urlApi = "http://localhost:3010/webapi/userRegister";
 
   //register Handler
@@ -25,6 +28,8 @@ function Register() {
         console.log(err);
       });
   };
+
+  
 
   return (
     <div id="reg-div">
@@ -84,6 +89,68 @@ function Register() {
               </td>
             </tr>
             <tr>
+              <th>firstName</th>
+              <td>
+                <input
+                  type="text"
+                  onChange={(e) => {
+                    setRegisterDetails({
+                      ...registerDetals,
+                      firstName: e.target.value,
+                    });
+                  }}
+                  placeholder="enter first name"
+                />
+              </td>
+            </tr>
+
+            <tr>
+              <th>lastName</th>
+              <td>
+                <input
+                  type="text"
+                  onChange={(e) => {
+                    setRegisterDetails({
+                      ...registerDetals,
+                      lastName: e.target.value,
+                    });
+                  }}
+                  placeholder="enter last name"
+                />
+              </td>
+            </tr>    
+
+            <tr>
+              <th>gender</th>
+              <td>
+                Male
+                <input
+                  type="radio"
+                  onChange={(e) => {
+                    setRegisterDetails({
+                      ...registerDetals,
+                      gender: e.target.value,
+                    });
+                  }}
+                  name="gender"
+                  value="male"
+                />
+                Female
+                <input
+                  type="radio"
+                  onChange={(e) => {
+                    setRegisterDetails({
+                      ...registerDetals,
+                      gender: e.target.value,
+                    });
+                  }}
+                  name="gender"
+                  value="female"
+                />
+              </td>
+            </tr>
+
+            <tr>
               <td colSpan={2}>
                 <center>
                   <button onClick={registerHandler}>Register</button>
@@ -93,9 +160,10 @@ function Register() {
           </table>
         </form>
         <Link to="../login">
-          {" "}
-          <button type="button">Login</button>{" "}
+        
+          <button type="button">Login</button>
         </Link>
+        
       </center>
     </div>
   );

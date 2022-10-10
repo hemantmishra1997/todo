@@ -10,8 +10,8 @@ function Userrunningitem(props){
             <li>
                 <h3>
                 {props.data.task}&#160;&#160;
-                <button onClick={()=>{stateChange(props.data._id,"Initial")}}>Initial</button>&#160;&#160;
-                <button onClick={()=>{stateChange(props.data._id,"done")}}>done</button></h3>
+                <button onClick={()=>{stateChange(props.data.id,"Initial")}}>Initial</button>&#160;&#160;
+                <button onClick={()=>{stateChange(props.data.id,"done")}}>done</button></h3>
             </li>
         </div>
     )

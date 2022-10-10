@@ -1,27 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import "./user.css";
 import Userlist from "./userList";
 import Userdonelist from "./userDoneList";
 import Userrunninglist from "./userRunningList";
 import Addtask from "./addTask";
-import socketIOClient from 'socket.io-client';
 
-const ENDPOINT = "http://localhost:3010/"
 
 function User(props) {
   const [initalResult, setinitalResult] = useState([]);
   const [runningResult, setRunningResult] = useState([]);
   const [doneResult, setDoneResult] = useState([]);
   const [output, setOutput] = useState("");
-  const [loader, setLoader] = useState(false);
-  const [response, setResponse] = useState('');
-
-  //const [loaderForRunning , setLoaderForRunning] = useState(false);
-  // const [loaderForDone , setLoaderForDone] = useState(false);
   const apiURlFetchTaskInital =
     "http://localhost:3010/webapi/fetchTask?state=Initial";
   const apiURlFetchTaskRunning =
@@ -33,21 +24,23 @@ function User(props) {
 
   const userDetail = localStorage.getItem("email");
   const token = localStorage.getItem("token");
+  const provider  = localStorage.getItem("provider")
   let navigate = useNavigate();
 
   //useEffect Hook
   useEffect(() => {
-    const socket = socketIOClient(ENDPOINT);
-    socket.on("hello", (arg, callback) => {
-      console.log(arg);
-      if(arg.length==0)
-      {
-        console.log("null data");
-      }
-      else
-      toast(arg[0].task);
-      callback("massgae passed sucessfully");
-    });
+    
+    // const socket = socketIOClient(ENDPOINT);
+    // socket.on("hello", (arg, callback) => {
+    //   console.log(arg);
+    //   if(arg.length==0)
+    //   {
+    //     console.log("null data");
+    //   }
+    //   else
+    //   toast(arg[0].task);
+    //   callback("massgae passed sucessfully");
+    // });
 
      getItemsInitial();
     getItemsRunning();
@@ -58,7 +51,7 @@ function User(props) {
   //logout handler
   const logoutHandler = () => {
     localStorage.clear();
-    navigate("../login");
+    navigate("../");
     props.cRole();
   };
 
@@ -139,33 +132,35 @@ function User(props) {
   };
 
   //add data handler event
-  const addTask = (newTask) => {
-         axios
+  const addTask = async(newTask) => {
+    if(provider)
+    {
+      console.log("xxxxx");
+      const result = await axios
+      .post("http://localhost:3010/webapi/addTaskByFacebook", newTask, {
+        headers: { Authorization: token },
+      })
+      console.log(result);
+    }
+    else{
+      console.log("yyyyy");
+
+      const result = await axios
       .post(apiURladdTask, newTask, {
         headers: { Authorization: "Bearer " + token },
       })
-      .then((result) => {
+      console.log(result);
         setOutput(result.data.response);
         getItemsInitial();
         getItemsRunning();
         getItemsDone();
-        setTimeout(()=>{
-          axios.get("http://localhost:3010/webapi/reminder" ,{
-           headers: { Authorization: "Bearer " + token },
-         }).then((result)=>{
-           console.log(result);
-          //  alert(`Reminder ${result.data.response.task}`)
-           
-         })
-        },3000)
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      
+    }
   };
 
   //update State
   const updateState = (id, state) => {
+    // console.log(id,state);
     var data = { state: state };
     axios
       .put(apiUrlUpdateState + id, data, {
@@ -191,7 +186,7 @@ function User(props) {
         <Userlist
           items={initalResult}
           changeState={updateState}
-           mLoader={loader}
+          //  mLoader={loader}
         />
         <hr />
         <Userrunninglist
@@ -210,5 +205,5 @@ function User(props) {
   );
   
 }
-<ToastContainer/>
+{/* <ToastContainer/> */}
 export default User;
